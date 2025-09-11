@@ -48,6 +48,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                 </div>
                 <form onSubmit={handleSubmit}>
                   <div className="modal-body">
+
                     <div className="mb-3">
                       <label className="form-label">
                         <strong>Nombre</strong>
@@ -61,6 +62,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                         onChange={handleChange}
                       />
                     </div>
+
                     <div className="mb-3">
                       <label className="form-label">
                         <strong>Email</strong>
@@ -74,6 +76,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                         onChange={handleChange}
                       />
                     </div>
+
                     <div className="mb-3">
                       <label className="form-label">
                         <strong>Telefono</strong>
@@ -87,6 +90,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                         onChange={handleChange}
                       />
                     </div>
+
                     <div className="mb-3">
                       <label className="form-label">
                         <strong>Rol</strong>
@@ -104,6 +108,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                         <option value="Propietario">Propietario</option>
                       </select>
                     </div>
+
                     <div className="mb-3">
                       <label className="form-label">
                         <strong>Password</strong>
@@ -119,6 +124,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                         We'll never share your email with anyone else.
                       </div>
                     </div>
+                    
                   </div>
                   <div className="modal-footer">
                     <button
