@@ -66,6 +66,7 @@ export default function UsuariosList() {
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Correo</th>
+                  <th>Contacto</th>
                   <th>Rol</th>
                   <th>Acciones</th>
                 </tr>
@@ -77,6 +78,7 @@ export default function UsuariosList() {
                       <td>{index + 1}</td>
                       <td>{usuario.nombre}</td>
                       <td>{usuario.email}</td>
+                      <td>{usuario.tel}</td>
                       <td>{usuario.rol}</td>
                       <td>
                         <button

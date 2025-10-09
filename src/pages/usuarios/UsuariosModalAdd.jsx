@@ -105,6 +105,7 @@ export default function UsuariosModalAdd({cargarUsuarios}) {
                         <option value="Administrador">Administrador</option>
                         <option value="Residente">Residente</option>
                         <option value="Propietario">Propietario</option>
+                        <option value="Empleado">Empleado</option>
                       </select>
                     </div>
                     <div className="mb-3">

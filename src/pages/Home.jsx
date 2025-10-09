@@ -42,7 +42,7 @@ export default function Home() {
             <tbody>
               <tr>
                 <td>A-101</td>
-                <td>Juan Pérez</td>
+                <td>Jose Pérez</td>
                 <td>RD$ 5,000</td>
                 <td>2025-08-28</td>
               </tr>
