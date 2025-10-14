@@ -82,7 +82,7 @@ export default function UsuariosModalEdit({usuario, cargarUsuarios}) {
                         <strong>Telefono</strong>
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         className="form-control"
                         placeholder="Ej: 809-321-6547"
                         name="tel"

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
+export default function CuentasModalEdit({cuenta, bancos, condominios, cargarCuentas }) {
   const [form, setForm] = useState({
     account_number: "",
     id_bank: "",
     account_type: "",
     balance: "",
     currency: "",
+    condo_id: ""
   });
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log(cuenta);
     try {
       await axios.put(`http://localhost:4000/api/cuentas/${form.id_account}`, form);
       cargarCuentas();
@@ -54,6 +56,7 @@ export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
+
               <div className="mb-3">
                 <label className="form-label">
                   <strong>N. Cuenta</strong>
@@ -79,7 +82,7 @@ export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
                   onChange={handleChange}
                   required
                 >
-                  <option value="Residente">Selecciona un Banco</option>
+                  <option value="" >Selecciona un banco</option>
                   {bancos.map((banco) => (
                     <option key={banco.id_bank} value={banco.id_bank}>
                       {banco.name}
@@ -99,7 +102,7 @@ export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Selecciona un Tipo</option>
+                  {/* <option value="">Selecciona un Tipo</option> */}
                   <option value="Ahorro">Ahorro</option>
                   <option value="Corriente">Corriente</option>
                   <option value="Empresarial">Empresarial</option>
@@ -124,6 +127,26 @@ export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
 
               <div className="mb-3">
                 <label className="form-label">
+                  <strong>Condominio</strong>
+                </label>
+                <select
+                  className="form-control"
+                  name="condo_id"
+                  value={form.condo_id}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" >Selecciona un banco</option>
+                  {condominios.map((condominio) => (
+                    <option key={condominio.condo_id} value={condominio.condo_id}>
+                      {condominio.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
                   <strong>Moneda</strong>
                 </label>
                 <select
@@ -134,9 +157,9 @@ export default function CuentasModalEdit({cuenta, bancos, cargarCuentas }) {
                   required
                 >
                   <option value="">Selecciona Moneda</option>
-                  <option value="RD$">RD$</option>
-                  <option value="US$">US$</option>
-                  <option value="EU$">EU$</option>
+                  <option value="DOP">DOP</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
                 </select>
               </div>
             </div>

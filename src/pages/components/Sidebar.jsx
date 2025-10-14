@@ -1,15 +1,13 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   const menuItems = [
     { name: "Home", path: "/" },
-    { name: "Condominios", path: "/condominios" },
-    { name: "Unidades", path: "/unidades" },
     { name: "Bancos", path: "/bancos" },
+    { name: "Condominios", path: "/condominios" },
     { name: "Facturación", path: "/facturacion" },
-    { name: "Finanzas", path: "/finanzas" },
-    { name: "Empleados", path: "/empleados" },
+    { name: "Suplidores", path: "/suplidores" },
+    { name: "Unidades", path: "/unidades" },
     { name: "Usuarios", path: "/usuarios" },
   ];
 

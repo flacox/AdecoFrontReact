@@ -6,77 +6,43 @@ export default function Home() {
   const [metrics, setMetrics] = useState({
     total_condominios: 0,
     total_unidades: 0,
-    total_empleados: 0,
+    total_usuarios: 0,
     total_balance: 0,
   });
 
-  const [condominios, setCondominios] = useState([]);
-  const [selectedCondo, setSelectedCondo] = useState(null);
+  function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
-  const loadCondominios = async () => {
-    const res = await api.get("/condominios");
-    setCondominios(res.data);
-    if (res.data.length > 0) setSelectedCondo(res.data[0].condo_id); // selecciona el primer condominio
-  };
-
-  const fetchResumen = async (condo_id) => {
-    const res = await api.get(`/home/${condo_id}`);
+  const fetchResumen = async () => {
+    const res = await api.get("/home");
     setMetrics(res.data[0]);
   };
 
   useEffect(() => {
-    loadCondominios();
-  }, []);
-
-  useEffect(() => {
-    fetchResumen(selectedCondo);
-  }, [selectedCondo]);
-
-  function formatNumber(num) {
-    if (!num) return "0";
-    return new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    }).format(num);
-  }
+    fetchResumen();
+  }, [metrics]);
 
   return (
     <DashboardLayout>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Bienvenido al Dashboard de ADECO</h1>
-
-        <div>
-          <label className="me-2 fw-bold">Condominio:</label>
-          <select
-            className="form-select d-inline-block w-auto"
-            value={selectedCondo || ""}
-            onChange={(e) => setSelectedCondo(e.target.value)}
-          >
-            <option value="">Seleccione...</option>
-            {condominios.map((c) => (
-              <option key={c.condo_id} value={c.condo_id}>
-                {c.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-
-      </div>
+      <h1 className="mb-4">Bienvenido al Dashboard de ADECO</h1>
 
       <div className="row mb-4">
         {/* Total Condominios */}
         <div className="col-md-3 mb-3">
-          <div className="card text-white bg-primary h-100">
+          <div className={`card text-white bg-primary h-100`}>
             <div className="card-body">
               <h5 className="card-title">Total Condominios</h5>
-              <p className="card-text fs-3">{metrics.total_condominios}</p>
+              <p className="card-text fs-3">
+                {metrics ? metrics.total_condominios : "loading"}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Total Unidades */}
         <div className="col-md-3 mb-3">
-          <div className="card text-white bg-secondary h-100">
+          <div className={`card text-white bg-secondary h-100`}>
             <div className="card-body">
               <h5 className="card-title">Total Unidades</h5>
               <p className="card-text fs-3">{metrics.total_unidades}</p>
@@ -86,19 +52,17 @@ export default function Home() {
 
         {/* Total Balance */}
         <div className="col-md-3 mb-3">
-          <div className="card text-white bg-success h-100">
+          <div className={`card text-white bg-success h-100`}>
             <div className="card-body">
               <h5 className="card-title">Balance</h5>
-              <p className="card-text fs-3">
-                {formatNumber(metrics.total_balance)}
-              </p>
+              <p className="card-text fs-3">{formatNumber(metrics.total_balance)}</p>
             </div>
           </div>
         </div>
 
         {/* Total Empleados */}
         <div className="col-md-3 mb-3">
-          <div className="card text-white bg-danger h-100">
+          <div className={`card text-white bg-danger h-100`}>
             <div className="card-body">
               <h5 className="card-title">Total Empleados</h5>
               <p className="card-text fs-3">{metrics.total_empleados}</p>

@@ -82,7 +82,7 @@ export default function UsuariosModalAdd({cargarUsuarios}) {
                         <strong>Telefono</strong>
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         className="form-control"
                         placeholder="Ej: 809-321-6547"
                         name="tel"
@@ -105,6 +105,7 @@ export default function UsuariosModalAdd({cargarUsuarios}) {
                         <option value="Administrador">Administrador</option>
                         <option value="Residente">Residente</option>
                         <option value="Propietario">Propietario</option>
+                        <option value="Inquilino">Inquilino</option>
                         <option value="Empleado">Empleado</option>
                       </select>
                     </div>

@@ -5,6 +5,7 @@ import Condominios from "./pages/condominios/CondominiosList";
 import Unidades from "./pages/unidades/UnidadesList";
 import FacturacionList from "./pages/facturacion/FacturacionList";
 import Bancos from "./pages/bancos/BancosList";
+import Suplidores from "./pages/suplidores/SuplidoresList";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path="/condominios" element={<Condominios />} />
         <Route path="/unidades" element={<Unidades />} />
         <Route path="/bancos" element={<Bancos />} />
+        <Route path="/bancos" element={<Bancos />} />
+        <Route path="/suplidores" element={<Suplidores />} />
         <Route path="/facturacion" element={<FacturacionList />} />
       </Routes>
     </BrowserRouter>
