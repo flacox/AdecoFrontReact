@@ -1,51 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashBoardLayout";
+import api from "../../api/axios";
 
 export default function SuplidoresList() {
-  const suppliers = [
-    {
-      supplier_id: 1,
-      company_name: "Gomez Electrical Services",
-      contact_name: "Jose Gomez",
-      phone: "809-555-1234",
-      email: "info@gomezelectrical.com",
-      address: "45 Duarte Ave, Santiago",
-      rnc: "131231231",
-      service_type: "Electrical",
-      status: "active",
-      created_at: "12-10-2025",
-    },
-    {
-      supplier_id: 1,
-      company_name: "Perez Electrical Services",
-      contact_name: "Jose Gomez",
-      phone: "809-555-1234",
-      email: "info@gomezelectrical.com",
-      address: "45 Duarte Ave, Santiago",
-      rnc: "131231231",
-      service_type: "Electrical",
-      status: "inactive",
-      created_at: "12-10-2025",
-    },
-    {
-      supplier_id: 1,
-      company_name: "Gonzalez Electrical Services",
-      contact_name: "Jose Gomez",
-      phone: "809-555-1234",
-      email: "info@gomezelectrical.com",
-      address: "45 Duarte Ave, Santiago",
-      rnc: "131231231",
-      service_type: "Electrical",
-      status: "active",
-      created_at: "12-10-2025",
-    },
-  ];
+  const [suppliers, setSuppliers] = useState([]);
+
+  const loadSuppliers = async () => {
+    const res = await api.get("/suplidores");
+    setSuppliers(res.data);
+  };
+
+  useEffect(() => {
+    loadSuppliers();
+  }, []);
+
+  function formatFecha(fecha) {
+    if (!fecha) return "Sin Fecha";
+    return new Date(fecha).toLocaleDateString("es-DO", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
 
   return (
     <DashboardLayout>
       <div className="p-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2>Facturacion</h2>
+          <h2>Suplidores</h2>
 
           {/* <!-- Button trigger modal --> */}
           <button
@@ -54,7 +36,7 @@ export default function SuplidoresList() {
             data-bs-toggle="modal"
             data-bs-target="#addCondoModal"
           >
-            Agregar Factura
+            Agregar Suplidor
           </button>
 
           {/* Modal para agregar usuarios */}
@@ -94,13 +76,13 @@ export default function SuplidoresList() {
                       <td>{supplier.service_type}</td>
                       {/* <td>{supplier.status}</td> */}
                       <td>
-                        {supplier.status === 'active' ? (
-                            <button className="btn btn-success">Activo</button>
+                        {supplier.status === "active" ? (
+                          <button className="btn btn-success">Activo</button>
                         ) : (
-                            <button className="btn btn-danger">Inactivo</button>
+                          <button className="btn btn-danger">Inactivo</button>
                         )}
                       </td>
-                      <td>{supplier.created_at}</td>
+                      <td>{formatFecha(supplier.created_at)}</td>
                       <td>
                         <button
                           type="button"
