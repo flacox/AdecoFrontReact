@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import axios from "axios";
+import api from "../../api/axios";
 
 
-export default function UnidadesModalEdit({unidad, cargarUnidades, condominios}) {
+export default function UnidadesModalEdit({unidad, cargarUnidades, condominios, owners}) {
     const [form, setForm] = useState(unidad);
-    const unitURL = "http://localhost:4000/api/unidades";
 
     useEffect(() => {
         setForm(unidad);
@@ -20,7 +19,7 @@ export default function UnidadesModalEdit({unidad, cargarUnidades, condominios})
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(unitURL + "/" + form.unit_id, form);
+            await api.put(`/unidades/${form.unit_id}`, form);
             cargarUnidades();
         } catch (error) {
             console.error("Error al intentar editar la unidad", error);
@@ -85,6 +84,29 @@ export default function UnidadesModalEdit({unidad, cargarUnidades, condominios})
                   value={form.numero}
                   onChange={handleChange}
                 />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
+                  <strong>Propietario</strong>
+                </label>
+                <select
+                  className="form-control"
+                  name="id_owner"
+                  value={form.id_owner}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccione Propietario</option>
+                  {owners.map((owner) => (
+                    <option
+                      key={owner.id_owner}
+                      value={owner.id_owner}
+                    >
+                      {owner.first_name} {owner.last_name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="mb-3">

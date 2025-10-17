@@ -89,8 +89,10 @@ export default function Home() {
           <div className="card text-white bg-success h-100">
             <div className="card-body">
               <h5 className="card-title">Balance</h5>
-              <p className="card-text fs-3">
-                {formatNumber(metrics.total_balance)}
+              <p className={metrics.total_balance < 0 ? 'text-black fw-bold card-text fs-3' : 'text-white card-text fs-3'} >
+              
+              {/* className="card-text fs-3"> */}
+                ${formatNumber(metrics.total_balance)}
               </p>
             </div>
           </div>

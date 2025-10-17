@@ -1,14 +1,16 @@
 import { useState } from "react";
 import api from "../../api/axios";
 
-export default function UnidadesModalAdd({ cargarUnidades, condominios, owners }) {
+export default function SupplierModalAdd({ loadSuppliers }) {
   const [form, setForm] = useState({
-    condo_id: "",
-    numero: "",
-    id_owner: "",
-    tipo: "",
-    area: "",
-    estado: "",
+    company_name: "",
+    contact_name: "",
+    phone: "",
+    email: "",
+    address: "",
+    rnc: "",
+    service_type: "",
+    status: "active",
   });
 
   const handleChange = (e) => {
@@ -21,25 +23,26 @@ export default function UnidadesModalAdd({ cargarUnidades, condominios, owners }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/unidades", form);
+      await api.post("/suplidores", form);
       setForm({
-        condo_id: "",
-        numero: "",
-        id_owner: "",
-        tipo: "",
-        area: "",
-        estado: "",
+        company_name: "",
+        contact_name: "",
+        phone: "",
+        email: "",
+        address: "",
+        rnc: "",
+        service_type: "",
       });
-      cargarUnidades();
+      loadSuppliers();
     } catch (error) {
-        console.error("Error al intentar agrwgar unidad", error);
+      console.error("Error al intentar agrar el suplidor", error);
     }
   };
 
   return (
     <div
       className="modal fade"
-      id="addUnidadModal"
+      id="addSupplierModal"
       tabIndex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -48,7 +51,7 @@ export default function UnidadesModalAdd({ cargarUnidades, condominios, owners }
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Agregar Unidad
+              Agregar Suplidor
             </h5>
             <button
               type="button"
@@ -57,118 +60,105 @@ export default function UnidadesModalAdd({ cargarUnidades, condominios, owners }
               aria-label="Close"
             ></button>
           </div>
+
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
-
               <div className="mb-3">
                 <label className="form-label">
-                  <strong>Condominio</strong>
-                </label>
-                <select
-                  className="form-control"
-                  name="condo_id"
-                  value={form.condo_id}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione Condominio</option>
-                  {condominios.map((condominio) => (
-                    <option
-                      key={condominio.condo_id}
-                      value={condominio.condo_id}
-                    >
-                      {condominio.nombre}
-                    </option>
-                  
-                  ))}
-                </select>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">
-                  <strong>Numero</strong>
+                  <strong>Nombre Compañia</strong>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Ej: 2A"
-                  name="numero"
-                  value={form.numero}
+                  placeholder="Ej: Smart Tech Dom"
+                  name="company_name"
+                  value={form.company_name}
                   onChange={handleChange}
                 />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">
-                  <strong>Propietario</strong>
+                  <strong>Contacto</strong>
                 </label>
-                <select
+                <input
+                  type="text"
                   className="form-control"
-                  name="id_owner"
-                  value={form.id_owner}
+                  placeholder="Ej: Pedro Jose"
+                  name="contact_name"
+                  value={form.contact_name}
                   onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione Propietario</option>
-                  {owners.map((owner) => (
-                    <option
-                      key={owner.id_owner}
-                      value={owner.id_owner}
-                    >
-                      {owner.first_name} {owner.last_name}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">
-                  <strong>Tipo</strong>
+                  <strong>Telefono</strong>
                 </label>
-                <select
+                <input
+                  type="tel"
                   className="form-control"
-                  name="tipo"
-                  value={form.tipo}
+                  placeholder="Ej: 809-321-6547"
+                  name="phone"
+                  value={form.phone}
                   onChange={handleChange}
-                  required
-                >
-                  <option value="">Selecciona un Tipo</option>
-                  <option value="Apartamento">Apartamento</option>
-                  <option value="Casa">Casa</option>
-                  <option value="Local Comercial">Local Comercial</option>
-                </select>
+                />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">
-                  <strong>Area</strong>
+                  <strong>Correo</strong>
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Ej: smtd@cmd.com"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
+                  <strong>Direccion</strong>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Ej: C/2 #2 Santiago"
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
+                  <strong>RNC</strong>
                 </label>
                 <input
                   type="number"
                   className="form-control"
-                  placeholder="Ej: 200"
-                  name="area"
-                  value={form.area}
+                  placeholder="Ej: 32165478910"
+                  name="rnc"
+                  value={form.rnc}
                   onChange={handleChange}
                 />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">
-                  <strong>Estado</strong>
+                  <strong>Tipo de Servicio</strong>
                 </label>
-                <select
+                <input
+                  type="text"
                   className="form-control"
-                  name="estado"
-                  value={form.estado}
+                  placeholder="Ej: Electrico"
+                  name="service_type"
+                  value={form.service_type}
                   onChange={handleChange}
-                  required
-                >
-                  <option value="">Selecciona Estado</option>
-                  <option value="Ocupada">Ocupado</option>
-                  <option value="Vacante">Vacante</option>
-                  <option value="En mantenimiento">Mantenimiento</option>
-                </select>
+                />
               </div>
             </div>
             <div className="modal-footer">
@@ -184,7 +174,7 @@ export default function UnidadesModalAdd({ cargarUnidades, condominios, owners }
                 className="btn btn-primary"
                 data-bs-dismiss="modal"
               >
-                Save changes
+                Guardar
               </button>
             </div>
           </form>

@@ -1,60 +1,51 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import DashboardLayout from "../components/DashBoardLayout";
-import UnidadesModalAdd from "./UnidadesModalAdd";
-import UnidadesModalEdit from "./UnidadesModalEdit";
 import Pagination from "../components/Pagination";
 
-export default function UnidadesList() {
-  const [unidades, setUnidades] = useState([]);
-  const [owners, setOwners] = useState([])
-  const [condominios, setCondominios] = useState([]);
-  const [unidadSelected, setUnidadSelected] = useState([]);
+import { formatNumber, formatFecha } from "../../utils/formatters";
+
+import OwnerModalAdd from "./OwnerModalAdd";
+import OwnerModalEdit from "./OwnerModalEdit";
+
+export default function OwnerList() {
+  const [owners, setOwners] = useState([]);
+  const [ownerSelected, setOwnerSelected] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); //  búsqueda
   const [currentPage, setCurrentPage] = useState(1); // paginación
   const itemsPerPage = 10; // límite de registros por página
 
   useEffect(() => {
-    cargarUnidades();
+    loadOwners();
   }, []);
 
-  const cargarUnidades = async () => {
-    const res = await api.get("/unidades");
-    setUnidades(res.data);
-  };
-
-   const loadOwners = async () => {
+  const loadOwners = async () => {
     const res = await api.get("/owners");
     setOwners(res.data);
   };
 
-  const cargarCondominios = async () => {
-    const res = await api.get("/condominios");
-    setCondominios(res.data);
-  };
-
   const handleDelete = async (id) => {
-    if (window.confirm("Estas seguro que deseas borar esta unidad?")) {
+    if (window.confirm("Estas seguro que deseas borrar este registro?")) {
       try {
-        await api.delete(`/condomnios/${id}`);
-        cargarUnidades();
+        await api.delete(`/owners/${id}`);
+        loadOwners();
       } catch (error) {
-        console.error("Error al intentar borrar la unidad", error);
+        console.error("Error al intentar borrar este registro", error);
       }
     }
   };
 
   //  Filtro de búsqueda
-  const filteredUnidades = unidades.filter((unidad) =>
-    Object.values(unidad).some((val) =>
+  const filteredOwners = owners.filter((owner) =>
+    Object.values(owner).some((val) =>
       String(val).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
   // Paginación
-  const totalPages = Math.ceil(filteredUnidades.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredOwners.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedUnidades = filteredUnidades.slice(
+  const paginatedOwners = filteredOwners.slice(
     startIndex,
     startIndex + itemsPerPage
   );
@@ -78,25 +69,22 @@ export default function UnidadesList() {
     <DashboardLayout>
       <div className="p-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2>Unidades</h2>
+          <h2>Propietarios</h2>
 
           {/* <!-- Button trigger modal --> */}
           <button
             type="button"
             className="btn btn-primary"
             data-bs-toggle="modal"
-            data-bs-target="#addUnidadModal"
-            onClick={() => {cargarCondominios(); loadOwners()}}
+            data-bs-target="#addOwnerModal"
+            onClick={() => loadOwners()}
           >
-            Agregar Unidad
+            Agregar Propietario
           </button>
 
           {/* Modal para agregar usuarios */}
-          <UnidadesModalAdd
-            cargarUnidades={cargarUnidades}
-            condominios={condominios}
-            owners={owners}
-          />
+          <OwnerModalAdd loadOwners={loadOwners} />
+
         </div>
 
         {/* Barra de búsqueda */}
@@ -104,7 +92,7 @@ export default function UnidadesList() {
           <input
             type="text"
             className="form-control"
-            placeholder="Buscar unidad, condominio, tipo..."
+            placeholder="Buscar nombre, apellido, email..."
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -113,56 +101,54 @@ export default function UnidadesList() {
           />
         </div>
 
-        {/* Tabla de usuarios */}
+        {/* Tabla de owners */}
         <div className="card shadow-sm">
           <div className="card-body">
             <table className="table table-striped">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Condominio</th>
-                  <th>No.</th>
-                  <th>Propietario</th>
-                  <th>Tipo</th>
-                  <th>Area</th>
-                  <th>Estado</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Telefono</th>
+                  <th>Email</th>
+                  <th>Direccion</th>
+                  <th>Balance</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {paginatedUnidades.length > 0 ? (
-                  paginatedUnidades.map((unidad, index) => (
-                    <tr key={unidad.unit_id}>
+                {paginatedOwners.length > 0 ? (
+                  paginatedOwners.map((owner, index) => (
+                    <tr key={owner.id_owner}>
                       <td>{startIndex + index + 1}</td>
-                      <td>{unidad.condominio}</td>
-                      <td>{unidad.numero}</td>
-                      <td>{unidad.owner_name}</td>
-                      <td>{unidad.tipo}</td>
-                      <td>{unidad.area}</td>
-                      <td>{unidad.estado}</td>
+                      <td>{owner.first_name}</td>
+                      <td>{owner.last_name}</td>
+                      <td>{owner.contact}</td>
+                      <td>{owner.email}</td>
+                      <td>{owner.address}</td>
+                      <td
+                        className={owner.balance < 0 ? 'text-danger fw-bold' : 'text-success fw-bold'}>
+                          ${formatNumber(owner.balance)}
+                      </td>
+                      <td>{formatFecha(owner.created_at)}</td>
                       <td>
                         <button
                           type="button"
                           className="btn btn-warning btn-sm me-2"
                           data-bs-toggle="modal"
-                          data-bs-target="#editUnidadModal"
-                          onClick={() => {setUnidadSelected(unidad); loadOwners()}}
-                          //   onClick={() => editarUnidad(unidad)}
+                          data-bs-target="#editOwnerModal"
+                          onClick={() => setOwnerSelected(owner)}
                         >
                           Editar
                         </button>
 
                         {/* Modal editar UNidad */}
-                        <UnidadesModalEdit
-                          unidad={unidadSelected}
-                          cargarUnidades={cargarUnidades}
-                          condominios={condominios}
-                          owners={owners}
-                        />
-
+                        <OwnerModalEdit owner={ownerSelected} loadOwners={loadOwners} />
+                        
                         <button
                           className="btn btn-danger btn-sm"
-                          onClick={() => handleDelete(unidad.unit_id)}
+                          onClick={() => handleDelete(owner.id_owner)}
                         >
                           Eliminar
                         </button>
@@ -171,8 +157,8 @@ export default function UnidadesList() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center">
-                      No hay unidades registradas
+                    <td colSpan="8" className="text-center">
+                      No hay propietarios registrados
                     </td>
                   </tr>
                 )}
@@ -184,13 +170,13 @@ export default function UnidadesList() {
         {/* Controles de paginación */}
         <div className="d-flex justify-content-between align-items-center mt-3">
           <p className="mb-0">
-            Mostrando {paginatedUnidades.length} de {filteredUnidades.length}{" "}
-            unidades
+            Mostrando {paginatedOwners.length} de {filteredOwners.length}{" "}
+            regstros
           </p>
 
           <Pagination
             currentPage={currentPage}
-            totalItems={filteredUnidades.length}
+            totalItems={filteredOwners.length}
             itemsPerPage={itemsPerPage}
             onPageChange={handlePageChange}
           />

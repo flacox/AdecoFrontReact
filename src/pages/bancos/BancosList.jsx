@@ -197,7 +197,8 @@ export default function BancosList() {
                       <td>{account.bank_name}</td>
                       <td>{account.account_type}</td>
                       {/* <td>{account.id_bank}</td> */}
-                      <td>{formatCurrency(account.balance, account.currency)}</td>
+                      <td className={account.balance < 0 ? 'text-danger fw-bold' : 'text-success fw-bold'}>
+                        {formatCurrency(account.balance, account.currency)}</td>
                       <td>{account.condo_nombre}</td>
                       <td>
                         <button

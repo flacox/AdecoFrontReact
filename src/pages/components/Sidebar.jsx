@@ -6,6 +6,7 @@ export default function Sidebar() {
     { name: "Bancos", path: "/bancos" },
     { name: "Condominios", path: "/condominios" },
     { name: "Facturación", path: "/facturacion" },
+    { name: "Propietarios", path: "/propietarios" },
     { name: "Suplidores", path: "/suplidores" },
     { name: "Unidades", path: "/unidades" },
     { name: "Usuarios", path: "/usuarios" },

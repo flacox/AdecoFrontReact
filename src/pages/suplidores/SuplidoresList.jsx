@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashBoardLayout";
 import api from "../../api/axios";
+import SupplierModalAdd from "./SupplierModalAdd";
+import SupplierModalEdit from "./SupplierModalEdit";
 
 export default function SuplidoresList() {
   const [suppliers, setSuppliers] = useState([]);
+  const [supplierSelected, setSupplierSelected] = useState([]);
 
   const loadSuppliers = async () => {
     const res = await api.get("/suplidores");
@@ -13,6 +16,17 @@ export default function SuplidoresList() {
   useEffect(() => {
     loadSuppliers();
   }, []);
+
+  const handleDelete = async (id) => {
+    if(window.confirm("Estas seguro de borar este registro?")) {
+      try {
+        await api.delete(`/suplidores/${id}`);
+        loadSuppliers();
+      } catch (error) {
+        console.error("Error al intentar borar el registro");
+      }
+    }
+  };
 
   function formatFecha(fecha) {
     if (!fecha) return "Sin Fecha";
@@ -34,13 +48,13 @@ export default function SuplidoresList() {
             type="button"
             className="btn btn-primary"
             data-bs-toggle="modal"
-            data-bs-target="#addCondoModal"
+            data-bs-target="#addSupplierModal"
           >
             Agregar Suplidor
           </button>
 
           {/* Modal para agregar usuarios */}
-          {/* <CondominioModalAdd cargarCondominios={cargarCondominios} /> */}
+          <SupplierModalAdd loadSuppliers={loadSuppliers} />
         </div>
 
         {/* Tabla de condominios */}
@@ -88,21 +102,21 @@ export default function SuplidoresList() {
                           type="button"
                           className="btn btn-warning btn-sm me-2"
                           data-bs-toggle="modal"
-                          data-bs-target="#editCondoModal"
-                          // onClick={() => setFacturaSelected(factura)}
+                          data-bs-target="#editSupplierModal"
+                          onClick={() => setSupplierSelected(supplier)}
                         >
                           Editar
                         </button>
 
                         {/* Modal editar Usuario */}
-                        {/* <CondominioModalEdit
-                              condominio={condominioSelected}
-                              cargarCondominios={cargarCondominios}
-                            /> */}
+                        <SupplierModalEdit
+                          supplier={supplierSelected}
+                          loadSuppliers={loadSuppliers}
+                        />
 
                         <button
                           className="btn btn-danger btn-sm"
-                          // onClick={() => handleDelete(condominio.condo_id)}
+                          onClick={() => handleDelete(supplier.supplier_id)}
                         >
                           Eliminar
                         </button>

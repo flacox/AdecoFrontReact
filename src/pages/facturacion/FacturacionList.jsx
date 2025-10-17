@@ -4,7 +4,6 @@ import DashboardLayout from '../components/DashBoardLayout';
 export default function FacturacioList() {
   const [facturacion, setFacturacion] = useState(null);
 
-
   return (
     <DashboardLayout>
           <div className="p-4">
