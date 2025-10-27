@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../api/axios"
 
 export default function CuentasModalAdd({ bancos, condominios, cargarCuentas }) {
   const [form, setForm] = useState({
@@ -21,7 +21,7 @@ export default function CuentasModalAdd({ bancos, condominios, cargarCuentas }) 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:4000/api/cuentas", form);
+      await api.post("/cuentas", form);
       setForm({
         account_number: "",
         id_bank: "",
