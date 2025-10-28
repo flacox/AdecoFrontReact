@@ -6,18 +6,21 @@ export default function ExpenseModalAdd({ loadExpenses }) {
   const [condominios, setCondominios] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
   const [pettyCashList, setPettyCashList] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
 
   const [form, setForm] = useState({
     condo_id: "",
     payment_source_type: "",
     payment_source_id: "",
     description: "",
+    supplier_id: "",
     amount: "",
     date: new Date().toISOString().split("T")[0],
   });
 
   useEffect(() => {
     cargarCondominios();
+    loadSuppliers();
   }, []);
 
   const cargarCondominios = async () => {
@@ -25,32 +28,25 @@ export default function ExpenseModalAdd({ loadExpenses }) {
     setCondominios(res.data);
   };
 
-  // Cargar cuentas y cajas chicas
-  // useEffect(() => {
-  //   if (form.condo_id) {
-  //     if (form.payment_source_type === "bank") {
-  //       axios
-  //         .get(`/api/bank-accounts/${form.condo_id}`)
-  //         .then((res) => setBankAccounts(res.data));
-  //     } else if (form.payment_source_type === "petty_cash") {
-  //       axios
-  //         .get(`/api/petty-cash/${form.condo_id}`)
-  //         .then((res) => setPettyCashList(res.data));
-  //     }
-  //   }
-  // }, [form.condo_id, form.payment_source_type]);
+  const loadSuppliers = async () => {
+    const res = await api.get("/suplidores");
+    setSuppliers(res.data);
+  };
 
+  // Cargar cuentas y cajas chicas
   useEffect(() => {
     if (form.condo_id) {
-      axios
-        .get(`http://localhost:4000/api/cuentas?condo_id=${form.condo_id}`)
-        .then((res) => setBankAccounts(res.data));
-
-      axios
-        .get(`http://localhost:4000/api/pettycash?condo_id=${form.condo_id}`)
-        .then((res) => setPettyCashList(res.data));
+      if (form.payment_source_type === "BANK_ACCOUNT") {
+        axios
+          .get(`http://localhost:4000/api/cuentas/${form.condo_id}`)
+          .then((res) => setBankAccounts(res.data));
+      } else if (form.payment_source_type === "PETTY_CASH") {
+        axios
+          .get(`http://localhost:4000/api/pettycash/${form.condo_id}`)
+          .then((res) => setPettyCashList(res.data));
+      }
     }
-  }, [form.condo_id]);
+  }, [form.condo_id, form.payment_source_type]);
 
   const handleChange = (e) => {
     setForm({
@@ -161,7 +157,7 @@ export default function ExpenseModalAdd({ loadExpenses }) {
                     <option value="">Seleccione...</option>
                     {bankAccounts.map((acc) => (
                       <option key={acc.id_account} value={acc.id_account}>
-                        {acc.bank_name} - {acc.account_number}
+                        {acc.bank_name} - {acc.account_number} - {acc.balance}
                       </option>
                     ))}
                   </select>
@@ -199,6 +195,29 @@ export default function ExpenseModalAdd({ loadExpenses }) {
                   onChange={handleChange}
                   required
                 />
+              </div>
+              {/* Suplidores de servicios */}
+              <div className="mb-3">
+                <label className="form-label">
+                  <strong>Suplidor</strong>
+                </label>
+                <select
+                  className="form-control"
+                  name="supplier_id"
+                  value={form.supplier_id}
+                  onChange={handleChange}
+                  // required
+                >
+                  <option value="">Selecciona Suplidor</option>
+                  {suppliers.map((supplier) => (
+                    <option
+                      key={supplier.supplier_id}
+                      value={supplier.supplier_id}
+                    >
+                      {supplier.company_name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Monto */}

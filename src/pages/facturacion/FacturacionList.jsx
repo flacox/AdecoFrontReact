@@ -164,8 +164,8 @@ export default function FacturacionList() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center">
-                      No hay unidades registradas
+                    <td colSpan="9" className="text-center">
+                      No hay facturas registradas
                     </td>
                   </tr>
                 )}
